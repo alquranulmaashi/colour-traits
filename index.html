@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colors &amp; Descriptions — Interactive Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#137a54; --green-d:#0d5a3d; --green-l:#e4f4ec;
+    --blue:#1668a8;  --blue-d:#0f4e80; --blue-l:#e3f0fa;
+    --amber:#b7770a; --amber-l:#fbf0da;
+    --rose:#c0396b;  --rose-d:#93264f; --rose-l:#fbe6ee;
+    --teal:#0e7c86;  --teal-d:#0a5f67; --teal-l:#ddf1f2;
+    --graphite:#41474d; --graphite-d:#2c3136; --graphite-l:#e9ebed;
+    --gold:#c9a227;
+    --ink:#233436; --muted:#5d7175;
+    --bg:#f6f4ec; --card:#ffffff; --line:#e5e2d6;
+    --shadow:0 6px 22px rgba(30,50,45,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    background:
+      radial-gradient(1200px 500px at 100% -10%, #eef0f2 0, transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, #f7efe1 0, transparent 55%),
+      var(--bg);
+    color:var(--ink); line-height:1.55; min-height:100vh; padding:22px 16px 60px;
+  }
+  .ar{font-family:'Amiri',serif; direction:rtl; unicode-bidi:isolate;}
+  .wrap{max-width:960px; margin:0 auto;}
+
+  header.top{display:flex; align-items:center; gap:14px; margin-bottom:18px;}
+  .badge{flex:0 0 auto; width:46px; height:46px; border-radius:13px;
+    background:conic-gradient(from 200deg,#c0392b,#e0b400,#1f8a4c,#1d6fb8,#fff 0);
+    border:2px solid #fff; color:#fff; display:grid; place-items:center; font-weight:800; font-size:18px; box-shadow:var(--shadow);
+    text-shadow:0 1px 3px rgba(0,0,0,.5);}
+  header.top h1{font-size:19px; font-weight:800; line-height:1.2}
+  header.top p{font-size:14px; color:var(--muted)}
+  .progress{height:8px; background:#e7e3d5; border-radius:99px; overflow:hidden; margin:6px 0 20px}
+  .progress > i{display:block; height:100%; width:0;
+    background:linear-gradient(90deg,#c0392b,#e0b400,#1f8a4c,#1d6fb8); border-radius:99px; transition:width .4s ease}
+
+  .dots{display:flex; flex-wrap:wrap; gap:7px; justify-content:center; margin-bottom:18px}
+  .dots button{border:none; cursor:pointer; font:inherit; font-size:12px; font-weight:700;
+    padding:5px 11px; border-radius:99px; background:#eae6d8; color:var(--muted); transition:.2s;}
+  .dots button.active{background:var(--graphite); color:#fff; box-shadow:var(--shadow)}
+  .dots button:hover{background:#ded9c8}
+  .dots button.active:hover{background:var(--graphite)}
+
+  .slide{display:none; animation:pop .35s ease}
+  .slide.show{display:block}
+  @keyframes pop{from{opacity:0; transform:translateY(10px)}to{opacity:1; transform:none}}
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow); padding:26px 24px}
+  .eyebrow{display:inline-block; font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--graphite-d); background:var(--graphite-l); padding:5px 12px; border-radius:99px; margin-bottom:12px}
+  h2.title{font-size:22px; font-weight:800; margin-bottom:4px}
+  h2.title .ar{font-size:28px; display:block; margin-bottom:2px}
+  .lead{color:var(--muted); font-size:15px; margin-bottom:18px}
+
+  /* intro */
+  .hero{text-align:center; padding:34px 20px}
+  .hero .big{font-size:40px; color:var(--graphite-d); font-weight:700; margin-bottom:8px}
+  .hero .sub{font-size:20px; color:var(--amber); font-weight:800; margin-bottom:16px}
+  .mini{padding:10px 15px; border-radius:13px; font-weight:800; font-size:13.5px; display:inline-block}
+  .chips{display:flex; gap:9px; justify-content:center; flex-wrap:wrap; margin-top:10px}
+
+  /* pattern breakdown */
+  .breakdown{text-align:center; background:var(--bg); border:1.5px dashed var(--line); border-radius:18px;
+    padding:24px 18px; margin:6px 0 18px}
+  .pattern-row{display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-bottom:16px}
+  .patchip{padding:8px 16px; border-radius:11px; font-family:'Amiri',serif; font-size:20px; font-weight:700; background:var(--graphite-l); color:var(--graphite-d)}
+  .arrow-down{font-size:18px; color:var(--muted); margin:6px 0}
+  .example-row{display:flex; justify-content:center; gap:14px; flex-wrap:wrap}
+  .exchip2{padding:10px 18px; border-radius:12px; font-family:'Amiri',serif; font-size:22px; font-weight:700; color:#fff}
+
+  /* color swatch cards */
+  .grid{display:grid; gap:12px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:720px){.g3{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:460px){.g3,.g2{grid-template-columns:1fr}}
+  .swatch{border-radius:16px; padding:16px 12px; text-align:center; color:#fff; box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .swatch .row{display:flex; justify-content:space-between; align-items:center; padding:5px 2px; border-bottom:1px solid rgba(255,255,255,.25)}
+  .swatch .row:last-child{border-bottom:none}
+  .swatch .w{font-family:'Amiri',serif; font-size:19px; font-weight:700}
+  .swatch .lbl{font-size:10px; opacity:.85; text-transform:uppercase; letter-spacing:.03em}
+  .swatch .gloss{font-weight:800; font-size:13px; margin-bottom:8px; text-transform:uppercase; letter-spacing:.03em}
+
+  /* defect cards (neutral, not colored) */
+  .dcard{border:1.5px solid var(--line); background:#fff; border-radius:14px; padding:13px; text-align:center}
+  .dcard .gloss{font-weight:800; font-size:13px; color:var(--graphite-d); margin-bottom:8px}
+  .dcard .row{display:flex; justify-content:space-between; padding:5px 2px; border-bottom:1px dashed var(--line); font-size:13px}
+  .dcard .row:last-child{border-bottom:none}
+  .dcard .w{font-family:'Amiri',serif; font-size:18px; font-weight:700; color:var(--ink)}
+  .dcard .lbl{color:var(--muted); font-size:10.5px}
+
+  /* qur'an boxes */
+  .qbox{background:var(--green-l); border:1px solid #cfe6da; border-radius:14px; padding:14px 16px; margin-bottom:10px}
+  .qbox .line{font-family:'Amiri',serif; font-size:20px; font-weight:700; color:var(--green-d); line-height:1.8}
+  .qbox .hl{padding:0 4px; border-radius:5px; background:#fff; border:1px solid #b9dbc7; font-weight:800}
+  .qbox small{display:block; color:var(--muted); font-style:italic; font-size:11.5px; margin-top:6px}
+
+  /* callback cards */
+  .callback{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:14px}
+  @media(max-width:620px){.callback{grid-template-columns:1fr}}
+  .cbcard{border-radius:16px; padding:16px; border:1.5px solid}
+  .cbcard .cap{font-weight:800; font-size:13.5px; margin-bottom:8px}
+  .cbcard .link{font-size:10.5px; color:var(--gold); font-weight:800; margin-top:6px}
+  .cb-blue{border-color:var(--blue-l); background:var(--blue-l)} .cb-blue .cap{color:var(--blue-d)}
+  .cb-rose{border-color:var(--rose-l); background:var(--rose-l)} .cb-rose .cap{color:var(--rose-d)}
+  .cbcard .w{font-family:'Amiri',serif; font-size:24px; font-weight:700}
+
+  .note{margin-top:10px; background:#fffbf0; border:1px solid #efe6c4; border-radius:14px; padding:13px 15px; font-size:13.5px; display:flex; gap:10px}
+  .note .ic{flex:0 0 auto; width:26px; height:26px; border-radius:8px; background:var(--gold); color:#fff; display:grid; place-items:center; font-weight:800}
+
+  /* recap */
+  table.recap{width:100%; border-collapse:separate; border-spacing:0 8px; font-size:13px}
+  table.recap td{background:#fff; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:10px 12px; vertical-align:top}
+  table.recap td:first-child{border-left:1px solid var(--line); border-radius:10px 0 0 10px; font-weight:800; width:110px}
+  table.recap td:last-child{border-right:1px solid var(--line); border-radius:0 10px 10px 0}
+  table.recap .w{font-family:'Amiri',serif; font-size:17px; font-weight:700}
+
+  /* quiz */
+  .quiz .q-word{text-align:center; font-family:'Amiri',serif; font-size:40px; font-weight:700; margin:8px 0}
+  .q-count{text-align:center; color:var(--muted); font-size:13px; font-weight:700; margin-bottom:14px}
+  .opts{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+  @media(max-width:560px){.opts{grid-template-columns:1fr}}
+  .opt{border:2px solid var(--line); background:#fff; border-radius:14px; padding:13px 10px; cursor:pointer;
+    font:inherit; font-weight:800; font-size:14px; transition:.15s; text-align:center}
+  .opt:hover{border-color:var(--graphite); background:#f4f5f6}
+  .opt:disabled{cursor:default}
+  .opt.correct{background:var(--green); color:#fff; border-color:var(--green)}
+  .opt.wrong{background:var(--rose-l); border-color:var(--rose); color:var(--rose)}
+  .fb{margin-top:14px; border-radius:14px; padding:13px 15px; font-size:14px; font-weight:600; display:none}
+  .fb.show{display:block; animation:pop .3s}
+  .fb.ok{background:var(--green-l); color:var(--green-d)}
+  .fb.no{background:var(--rose-l); color:var(--rose)}
+  .scoreline{text-align:center; margin-top:16px; font-weight:800; color:var(--green-d)}
+
+  /* answer key */
+  .keyrow{display:flex; gap:14px; align-items:flex-start; background:#fff; border:1px solid var(--line);
+    border-radius:14px; padding:14px 16px; margin-bottom:10px}
+  .keyrow .qn{flex:0 0 auto; width:30px; height:30px; border-radius:50%; background:var(--graphite-l);
+    color:var(--graphite-d); font-weight:800; display:grid; place-items:center; font-size:13px}
+  .keyrow .body{flex:1}
+  .keyrow .phrase{font-family:'Amiri',serif; font-size:21px; font-weight:700; color:var(--ink)}
+  .keyrow .verdict{display:inline-block; font-size:11px; font-weight:800; text-transform:uppercase;
+    letter-spacing:.03em; padding:3px 10px; border-radius:99px; margin-left:10px; vertical-align:middle;
+    background:var(--graphite-l); color:var(--graphite-d)}
+  .keyrow .why{font-size:13px; color:var(--muted); margin-top:6px}
+
+  .nav{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:20px}
+  .btn{border:none; cursor:pointer; font:inherit; font-weight:800; font-size:15px; padding:12px 22px; border-radius:13px; transition:.2s}
+  .btn.prev{background:#eae6d8; color:var(--ink)} .btn.prev:hover{background:#ded9c8}
+  .btn.next{background:linear-gradient(145deg,var(--graphite),var(--graphite-d)); color:#fff; box-shadow:var(--shadow)}
+  .btn.next:hover{filter:brightness(1.2)}
+  .btn:disabled{opacity:.4; cursor:default}
+  .kbd-hint{text-align:center; color:var(--muted); font-size:12px; margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="badge">أ</div>
+    <div>
+      <h1>Colors &amp; Descriptions</h1>
+      <p class="ar" style="font-size:15px">الأَلْوَانُ وَالعُيُوب</p>
+    </div>
+  </header>
+  <div class="progress"><i id="bar"></i></div>
+  <div class="dots" id="dots"></div>
+
+  <!-- 0 INTRO -->
+  <section class="slide show">
+    <div class="panel hero">
+      <div class="ar big">الأَلْوَانُ وَالعُيُوب</div>
+      <div class="sub">One Pattern for Colors &amp; Physical Traits</div>
+      <p class="lead" style="max-width:600px;margin:0 auto 16px">
+        Arabic colors — and certain physical descriptions like “blind” or “deaf” — all follow one
+        special three-part pattern. It even connects back to two rules you've already learned:
+        diptotes, and the feminine ending اء.
+      </p>
+      <div class="chips">
+        <span class="mini" style="background:var(--graphite-l);color:var(--graphite-d)">أَفْعَلُ · فَعْلَاءُ · فُعْلٌ</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1 THE PATTERN -->
+  <section class="slide">
+    <div class="panel">
+      <span class="eyebrow">The big idea</span>
+      <h2 class="title"><span class="ar">الوَزْنُ الوَاحِد</span>One template, every time</h2>
+      <p class="lead">Every color and every word in this lesson is built from the same three-slot template.</p>
+      <div class="breakdown">
+        <div class="pattern-row">
+          <span class="patchip">أَفْعَلُ<br><small style="font-weight:600;font-size:11px">masculine</small></span>
+          <span class="patchip">فَعْلَاءُ<br><small style="font-weight:600;font-size:11px">feminine</small></span>
+          <span class="patchip">فُعْلٌ<br><small style="font-weight:600;font-size:11px">plural</small></span>
+        </div>
+        <div class="arrow-down">↓ for example, “red” ↓</div>
+        <div class="example-row">
+          <span class="exchip2" style="background:#c0392b">أَحْمَرُ</span>
+          <span class="exchip2" style="background:#c0392b">حَمْرَاءُ</span>
+          <span class="exchip2" style="background:#c0392b">حُمْرٌ</span>
+        </div>
+      </div>
+      <div class="note"><span class="ic">i</span><div>This pattern isn't used for ordinary adjectives — it's reserved specifically for <b>colors</b> and a handful of <b>physical descriptions</b>.</div></div>
+    </div>
+  </section>
+
+  <!-- 2 COLORS -->
+  <section class="slide">
+    <div class="panel">
+      <span class="eyebrow" style="color:var(--graphite-d);background:var(--graphite-l)">الأَلْوَان · Colors</span>
+      <h2 class="title" style="font-size:21px">Six colors, three forms each</h2>
+      <div class="grid g3">
+        <div class="swatch" style="background:#c0392b"><div class="gloss">Red</div>
+          <div class="row"><span class="w">أَحْمَرُ</span><span class="lbl">m.</span></div>
+          <div class="row"><span class="w">حَمْرَاءُ</span><span class="lbl">f.</span></div>
+          <div class="row"><span class="w">حُمْرٌ</span><span class="lbl">pl.</span></div></div>
+        <div class="swatch" style="background:#2c3136"><div class="gloss">Black</div>
+          <div class="row"><span class="w">أَسْوَدُ</span><span class="lbl">m.</span></div>
+          <div class="row"><span class="w">سَوْدَاءُ</span><span class="lbl">f.</span></div>
+          <div class="row"><span class="w">سُودٌ</span><span class="lbl">pl.</span></div></div>
+        <div class="swatch" style="background:#c99a10"><div class="gloss">Yellow</div>
+          <div class="row"><span class="w">أَصْفَرُ</span><span class="lbl">m.</span></div>
+          <div class="row"><span class="w">صَفْرَاءُ</span><span class="lbl">f.</span></div>
+          <div class="row"><span class="w">صُفْرٌ</span><span class="lbl">pl.</span></div></div>
+        <div class="swatch" style="background:#1f8a4c"><div class="gloss">Green</div>
+          <div class="row"><span class="w">أَخْضَرُ</span><span class="lbl">m.</span></div>
+          <div class="row"><span class="w">خَضْرَاءُ</span><span class="lbl">f.</span></div>
+          <div class="row"><span class="w">خُضْرٌ</span><span class="lbl">pl.</span></div></div>
+        <div class="swatch" style="background:#1d6fb8"><div class="gloss">Blue</div>
+          <div class="row"><span class="w">أَزْرَقُ</span><span class="lbl">m.</span></div>
+          <div class="row"><span class="w">زَرْقَاءُ</span><span class="lbl">f.</span></div>
+          <div class="row"><span class="w">زُرْقٌ</span><span class="lbl">pl.</span></div></div>
+        <div class="swatch" style="background:#8a8f94"><div class="gloss">White</div>
+          <div class="row"><span class="w">أَبْيَضُ</span><span class="lbl">m.</span></div>
+          <div class="row"><span class="w">بَيْضَاءُ</span><span class="lbl">f.</span></div>
+          <div class="row"><span class="w">بِيضٌ</span><span class="lbl">pl.</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 DEFECTS -->
+  <section class="slide">
+    <div class="panel">
+      <span class="eyebrow" style="color:var(--graphite-d);background:var(--graphite-l)">العُيُوب · Physical Descriptions</span>
+      <h2 class="title" style="font-size:21px">The same pattern, describing people</h2>
+      <p class="lead">These specific physical traits use the exact same أَفْعَل / فَعْلَاء / فُعْل template.</p>
+      <div class="grid g3">
+        <div class="dcard"><div class="gloss">Mute</div>
+          <div class="row"><span class="w">أَبْكَمُ</span><span class="lbl">m.</span></div>
+          <div class="row"><span class="w">بَكْمَاءُ</span><span class="lbl">f.</span></div>
+          <div class="row"><span class="w">بُكْمٌ</span><span class="lbl">pl.</span></div></div>
+        <div class="dcard"><div class="gloss">Blind</div>
+          <div class="row"><span class="w">أَعْمَى</span><span class="lbl">m.</span></div>
+          <div class="row"><span class="w">عَمْيَاءُ</span><span class="lbl">f.</span></div>
+          <div class="row"><span class="w">عُمْيٌ / عُمْيَان</span><span class="lbl">pl.</span></div></div>
+        <div class="dcard"><div class="gloss">Born blind</div>
+          <div class="row"><span class="w">أَكْمَهُ</span><span class="lbl">m.</span></div>
+          <div class="row"><span class="w">كَمْهَاءُ</span><span class="lbl">f.</span></div>
+          <div class="row"><span class="w">كُمْهٌ</span><span class="lbl">pl.</span></div></div>
+        <div class="dcard"><div class="gloss">Vitiligo/leprosy</div>
+          <div class="row"><span class="w">أَبْرَصُ</span><span class="lbl">m.</span></div>
+          <div class="row"><span class="w">بَرْصَاءُ</span><span class="lbl">f.</span></div>
+          <div class="row"><span class="w">بُرْصٌ</span><span class="lbl">pl.</span></div></div>
+        <div class="dcard"><div class="gloss">Deaf</div>
+          <div class="row"><span class="w">أَصَمُّ</span><span class="lbl">m.</span></div>
+          <div class="row"><span class="w">صَمَّاءُ</span><span class="lbl">f.</span></div>
+          <div class="row"><span class="w">صُمٌّ</span><span class="lbl">pl.</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 QURAN -->
+  <section class="slide">
+    <div class="panel">
+      <span class="eyebrow" style="color:var(--green-d);background:var(--green-l)">From the Qur'an</span>
+      <h2 class="title" style="font-size:21px">The exact same forms, in revelation</h2>
+      <div class="qbox"><div class="line">وَمِنَ الْجِبَالِ جُدَدٌ <span class="hl">بِيضٌ</span> وَ<span class="hl">حُمْرٌ</span> مُّخْتَلِفٌ أَلْوَانُهَا وَغَرَابِيبُ <span class="hl">سُودٌ</span></div><small>“And among the mountains are tracts, white and red of varying shades, and [some] extremely black” — Sūrah Fāṭir, 35:27. All three plurals appear together.</small></div>
+      <div class="qbox"><div class="line">...<span class="hl">صَفْرَاءُ</span> فَاقِعٌ لَّوْنُهَا تَسُرُّ النَّاظِرِينَ</div><small>“a yellow cow, bright in color, pleasing to the observer” — Sūrah al-Baqarah, 2:69. بَقَرَة (cow) is feminine, matched by صَفْرَاءُ.</small></div>
+      <div class="qbox"><div class="line"><span class="hl">صُمٌّ</span> <span class="hl">بُكْمٌ</span> <span class="hl">عُمْيٌ</span> فَهُمْ لَا يَرْجِعُونَ</div><small>“Deaf, dumb, and blind — so they will not return [to the right path]” — Sūrah al-Baqarah, 2:18. Three plural forms, back to back.</small></div>
+      <div class="qbox"><div class="line">وَمَن كَانَ فِي هَٰذِهِ <span class="hl">أَعْمَىٰ</span> فَهُوَ فِي الْآخِرَةِ أَعْمَىٰ</div><small>“And whoever is blind in this [life] will be blind in the Hereafter” — Sūrah al-Isrā’, 17:72.</small></div>
+    </div>
+  </section>
+
+  <!-- 5 WHY DIPTOTE -->
+  <section class="slide">
+    <div class="panel">
+      <span class="eyebrow" style="color:var(--gold);background:#faf3dc">Connecting the dots</span>
+      <h2 class="title" style="font-size:21px">Why these singular forms are diptote</h2>
+      <p class="lead">Both أَحْمَرُ and حَمْرَاءُ refuse tanwīn — for two different reasons you've already met.</p>
+      <div class="callback">
+        <div class="cbcard cb-blue">
+          <div class="cap">Masculine — أَحْمَرُ</div>
+          <div class="w" style="color:var(--blue-d)">أَحْمَرُ</div>
+          <p style="font-size:12.5px;color:var(--ink);margin-top:8px">Matches a special adjective pattern the same way a name can match a verb's shape.</p>
+          <div class="link">— echoes the Diptotes lesson</div>
+        </div>
+        <div class="cbcard cb-rose">
+          <div class="cap">Feminine — حَمْرَاءُ</div>
+          <div class="w" style="color:var(--rose-d)">حَمْرَاءُ</div>
+          <p style="font-size:12.5px;color:var(--ink);margin-top:8px">Ends in ـاء (alif mamdūda) — one of the three feminine signs from your very first lesson.</p>
+          <div class="link">— echoes Word Types &amp; Feminine Signs</div>
+        </div>
+      </div>
+      <div class="note"><span class="ic">i</span><div>Both forms drop the tanwīn and take a <b>fatḥa</b> in the genitive, exactly like any other diptote.</div></div>
+    </div>
+  </section>
+
+  <!-- 6 PLURAL IS DIFFERENT -->
+  <section class="slide">
+    <div class="panel">
+      <span class="eyebrow" style="color:var(--gold);background:#faf3dc">One exception</span>
+      <h2 class="title" style="font-size:21px">But the plural behaves normally!</h2>
+      <p class="lead">Even though the singular forms are diptote, the plural فُعْلٌ is an ordinary broken plural — it takes tanwīn just fine.</p>
+      <div class="grid g2">
+        <div class="dcard"><div class="gloss">Singular — diptote</div>
+          <div class="w" style="text-align:center;font-size:24px">أَحْمَرُ</div>
+          <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:6px">no tanwīn</p></div>
+        <div class="dcard"><div class="gloss">Plural — ordinary</div>
+          <div class="w" style="text-align:center;font-size:24px">حُمْرٌ</div>
+          <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:6px">takes tanwīn normally</p></div>
+      </div>
+      <div class="note"><span class="ic">✓</span><div>You saw this already in Fāṭir 35:27 — بِيضٌ, حُمْرٌ, and سُودٌ all carry tanwīn, unlike their singular counterparts أَبْيَضُ, أَحْمَرُ, أَسْوَدُ.</div></div>
+    </div>
+  </section>
+
+  <!-- 7 RECAP -->
+  <section class="slide">
+    <div class="panel">
+      <span class="eyebrow" style="color:var(--gold);background:#faf3dc">Recap</span>
+      <h2 class="title" style="font-size:21px">The whole pattern, in one table</h2>
+      <table class="recap">
+        <tr><td>Masculine</td><td>أَفْعَلُ pattern — e.g. <span class="w">أَحْمَرُ</span> — diptote, matches a special adjective shape.</td></tr>
+        <tr><td>Feminine</td><td>فَعْلَاءُ pattern — e.g. <span class="w">حَمْرَاءُ</span> — diptote, ends in the alif mamdūda feminine sign.</td></tr>
+        <tr><td>Plural</td><td>فُعْلٌ pattern — e.g. <span class="w">حُمْرٌ</span> — an ordinary broken plural, takes tanwīn normally.</td></tr>
+        <tr><td>Used for</td><td>Colors (أحمر، أسود، أصفر، أخضر، أزرق، أبيض) and specific physical descriptions (أبكم، أعمى، أكمه، أبرص، أصم).</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 8 QUIZ -->
+  <section class="slide">
+    <div class="panel quiz">
+      <span class="eyebrow" style="color:var(--gold);background:#faf3dc">Quick Check</span>
+      <h2 class="title" style="font-size:21px">Which form is it?</h2>
+      <p class="lead">Read the word and choose its form in the pattern.</p>
+      <div class="q-count" id="qcount"></div>
+      <div class="q-word ar" id="qword"></div>
+      <div class="opts" id="qopts"></div>
+      <div class="fb" id="qfb"></div>
+      <div class="scoreline" id="qscore"></div>
+    </div>
+  </section>
+
+  <!-- 9 ANSWER KEY -->
+  <section class="slide">
+    <div class="panel">
+      <span class="eyebrow" style="color:var(--gold);background:#faf3dc">Reference</span>
+      <h2 class="title" style="font-size:21px">Quiz — questions &amp; answers</h2>
+      <p class="lead">All seven words from the quiz, with the answer and explanation, for review or printing.</p>
+      <div id="keyList"></div>
+    </div>
+  </section>
+
+  <!-- 10 DONE -->
+  <section class="slide">
+    <div class="panel hero">
+      <div style="font-size:52px">🎉</div>
+      <div class="ar big" style="font-size:36px">أَحْسَنْتَ!</div>
+      <div class="sub">You know the colors &amp; defects pattern</div>
+      <p class="lead" style="max-width:600px;margin:0 auto">أَفْعَلُ for masculine, فَعْلَاءُ for
+        feminine, فُعْلٌ for plural — and now you can see exactly why the first two are diptote.</p>
+      <div class="chips" style="margin-top:6px">
+        <span class="mini" style="background:#c0392b;color:#fff">أَحْمَرُ</span>
+        <span class="mini" style="background:#1f8a4c;color:#fff">أَخْضَرُ</span>
+        <span class="mini" style="background:#1d6fb8;color:#fff">أَزْرَقُ</span>
+        <span class="mini" style="background:#2c3136;color:#fff">أَسْوَدُ</span>
+      </div>
+      <div style="margin-top:22px"><button class="btn next" onclick="goTo(0)">↺ Start over</button></div>
+    </div>
+  </section>
+
+  <div class="nav">
+    <button class="btn prev" id="prevBtn" onclick="move(-1)">‹ Back</button>
+    <button class="btn next" id="nextBtn" onclick="move(1)">Next ›</button>
+  </div>
+  <p class="kbd-hint">Tip: use the ← and → arrow keys to move between steps</p>
+</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const labels=['Intro','The Pattern','Colors','Descriptions','Qur\u2019an','Why Diptote','Plural','Recap','Quiz','Answer Key','Done'];
+  let cur=0;
+  const dotWrap=document.getElementById('dots');
+  labels.forEach((l,i)=>{const b=document.createElement('button');b.textContent=l;b.onclick=()=>goTo(i);dotWrap.appendChild(b);});
+  const dots=[...dotWrap.children];
+  function render(){
+    slides.forEach((s,i)=>s.classList.toggle('show',i===cur));
+    dots.forEach((d,i)=>d.classList.toggle('active',i===cur));
+    document.getElementById('bar').style.width=(cur/(slides.length-1)*100)+'%';
+    document.getElementById('prevBtn').disabled=cur===0;
+    document.getElementById('nextBtn').style.visibility = cur===slides.length-1?'hidden':'visible';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function move(d){ goTo(Math.min(slides.length-1,Math.max(0,cur+d))); }
+  function goTo(i){ cur=i; render(); }
+  document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight')move(1); if(e.key==='ArrowLeft')move(-1); });
+
+  /* QUIZ */
+  const CATS=['Masculine (أَفْعَلُ)','Feminine (فَعْلَاءُ)','Plural (فُعْلٌ)'];
+  const Q=[
+    {w:'أَحْمَرُ', a:'Masculine (أَفْعَلُ)', why:'Follows the أَفْعَلُ pattern — masculine singular, diptote.'},
+    {w:'سَوْدَاءُ', a:'Feminine (فَعْلَاءُ)', why:'Follows the فَعْلَاءُ pattern — feminine singular, ends in alif mamdūda.'},
+    {w:'خُضْرٌ', a:'Plural (فُعْلٌ)', why:'Follows the فُعْلٌ pattern — an ordinary plural that takes tanwīn.'},
+    {w:'أَصَمُّ', a:'Masculine (أَفْعَلُ)', why:'Masculine singular of “deaf” — follows أَفْعَلُ.'},
+    {w:'بَيْضَاءُ', a:'Feminine (فَعْلَاءُ)', why:'Feminine singular of “white” — follows فَعْلَاءُ.'},
+    {w:'بُكْمٌ', a:'Plural (فُعْلٌ)', why:'Plural of “mute” — follows فُعْلٌ, takes tanwīn normally.'},
+    {w:'أَزْرَقُ', a:'Masculine (أَفْعَلُ)', why:'Masculine singular of “blue” — follows أَفْعَلُ.'},
+  ];
+  let qi=0, qs=0;
+  function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function loadQ(){
+    const q=Q[qi];
+    document.getElementById('qword').textContent=q.w;
+    document.getElementById('qcount').textContent=`Question ${qi+1} of ${Q.length}`;
+    const opts=shuffle(CATS);
+    const wrap=document.getElementById('qopts'); wrap.innerHTML='';
+    opts.forEach(o=>{
+      const b=document.createElement('button'); b.className='opt'; b.textContent=o;
+      b.onclick=()=>answer(b,o); wrap.appendChild(b);
+    });
+    document.getElementById('qfb').className='fb';
+  }
+  function answer(btn,choice){
+    const q=Q[qi];
+    [...document.querySelectorAll('#qopts .opt')].forEach(o=>{
+      o.disabled=true; if(o.textContent===q.a)o.classList.add('correct');
+    });
+    const fb=document.getElementById('qfb');
+    if(choice===q.a){qs++; fb.className='fb ok show'; fb.innerHTML='✅ Correct! '+q.why;}
+    else{btn.classList.add('wrong'); fb.className='fb no show'; fb.innerHTML='Not quite. '+q.why;}
+    qi++;
+    if(qi<Q.length){ setTimeout(loadQ,1500); }
+    else{ setTimeout(()=>{document.getElementById('qscore').textContent=`Score: ${qs} / ${Q.length}`;},1300); }
+  }
+
+  function buildKey(){
+    const wrap=document.getElementById('keyList');
+    Q.forEach((q,i)=>{
+      const row=document.createElement('div'); row.className='keyrow';
+      row.innerHTML = `
+        <div class="qn">${i+1}</div>
+        <div class="body">
+          <span class="phrase ar">${q.w}</span>
+          <span class="verdict">${q.a}</span>
+          <div class="why">${q.why}</div>
+        </div>`;
+      wrap.appendChild(row);
+    });
+  }
+
+  loadQ(); buildKey(); render();
+</script>
+</body>
+</html>
